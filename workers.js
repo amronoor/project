@@ -17,7 +17,7 @@ zk.connect(function getTasks(err)
           zk.aw_get_children("/Tasks",
           function(type,state,path){
               console.log("type",type,state,path);
-              zookeeper.a_get_children("/Tasks",true,function(rc,error,value){
+              zk.a_get_children("/Tasks",true,function(rc,error,value){
                   console.log("tasks",value);
                   });
           },
@@ -25,8 +25,8 @@ zk.connect(function getTasks(err)
           console.log("tasks",value);
           proccessTasks(value);
           });
-        
-        zk.a_get("/Tasks/child0000010923",false,function(rc,err,value,data){
+        //we must init the child node every time we need to read the value of it 
+        zk.a_get("/Tasks/child0000015943",false,function(rc,err,value,data){
             console.log("rc",rc,'err',err,'value',value,JSON.stringify(data));
            //data=JSON.parse(data);
              console.log(data);
@@ -41,28 +41,36 @@ zk.connect(function getTasks(err)
 // proccessTasks(data);
 function proccessTasks(data)
 {
+    //it doesn't add the value in the child node it print it beside the 0
     var sum=0;
-    for (var i = 0; i < data.length; i++) {
-        sum += data[i]; 
+    
+        sum += data; 
         console.log("sum=",sum);  
-    }
+    
 
-    //updateTotal(sum);
+    updateTotal(sum);
 }
-/*
+
 function updateTotal(sum)
 {
     
     zk.a_get("/Total",false,function(rc,err,value,data){
-        console.log("rc",rc,'err',err,'value',value,JSON.stringify(data));
-        data=JSON.parse(data);
-        data=data+sum;
-        console.log("total",data.total);
+        console.log("rc",rc,'err',err,'value',value,'data',data);
+        //data=JSON.parse(data);
+        //total=data+sum;
+        //console.log("total",total);
         //saveTotal(data)
-    })  
-    return data.total;
-}
+        return data;
+    }) ;
 
+    zk.a_set("/Total",JSON.stringify({sumation:sum}),0,function(rc,err,stat){
+        //data=JSON.parse(data);
+        console.log('rc',rc,'err',err,'stat',stat,'sumation',sum);
+    })
+    //getTasks(err);
+    //return data;
+}
+/*
 function saveTotal(sum)
 {
     zk.a_set("/Total",JSON.stringify({sumation:sum}),0,function(rc,err,stat){
