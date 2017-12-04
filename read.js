@@ -12,7 +12,7 @@ zk.connect(function (err) {
     console.log ("zk session established, id=%s", zk.client_id);
    
     
-  zk.a_get("/sh5450000000068",false,function(rc,err,value,data){
+  zk.a_get("/sh5450000000078",false,function(rc,err,value,data){
    console.log("rc",rc,'err',err,'value',value,JSON.stringify(data));
    data=JSON.parse(data);
     console.log(data);
