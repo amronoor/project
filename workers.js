@@ -14,7 +14,7 @@ zk.connect(function getTasks(err)
        /// new line
      
  //todo: get children (1)
-          zk.aw_get_children("/Tasks",
+         /* zk.aw_get_children("/Tasks",
           function(type,state,path){
               console.log("type",type,state,path);
               zk.a_get_children("/Tasks",true,function(rc,error,value){
@@ -24,16 +24,17 @@ zk.connect(function getTasks(err)
           function(rc,error,value){
           console.log("tasks",value);
           proccessTasks(value);
-          });
+          });*/
+
         //we must init the child node every time we need to read the value of it 
-        zk.a_get("/Tasks/child0000015943",false,function(rc,err,value,data){
+        zk.a_get("/Tasks/child0000017961",false,function(rc,err,value,data){
             console.log("rc",rc,'err',err,'value',value,JSON.stringify(data));
            //data=JSON.parse(data);
              console.log(data);
              proccessTasks(data);
              });
 
-
+//data is just one value and it doesn't need for loop 
        
         
 });
@@ -44,11 +45,11 @@ function proccessTasks(data)
     //it doesn't add the value in the child node it print it beside the 0
     var sum=0;
     
-        sum += data; 
+        sum =sum + data; 
         console.log("sum=",sum);  
     
 
-    updateTotal(sum);
+    //updateTotal(sum);
 }
 
 function updateTotal(sum)
@@ -70,6 +71,8 @@ function updateTotal(sum)
     //getTasks(err);
     //return data;
 }
+
+
 /*
 function saveTotal(sum)
 {
