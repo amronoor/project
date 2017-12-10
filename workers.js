@@ -17,7 +17,7 @@ zk.connect(function getTasks(err)
          /* zk.aw_get_children("/Tasks",
           function(type,state,path){
               console.log("type",type,state,path);
-              zk.a_get_children("/Tasks",true,function(rc,error,value){
+              zk.a_get_children("/Tasks",true,function(rc,error,children){
                   console.log("tasks",value);
                   });
           },
@@ -26,11 +26,13 @@ zk.connect(function getTasks(err)
           proccessTasks(value);
           });*/
 
+          var currentTask="/Tasks/child0000017961";//children[0];
         //we must init the child node every time we need to read the value of it 
-        zk.a_get("/Tasks/child0000017961",false,function(rc,err,value,data){
+        zk.a_get(currentTask,false,function(rc,err,value,data){
             console.log("rc",rc,'err',err,'value',value,JSON.stringify(data));
            //data=JSON.parse(data);
              console.log(data);
+             data=parseInt(data);
              proccessTasks(data);
              });
 
@@ -54,20 +56,28 @@ function proccessTasks(data)
 
 function updateTotal(sum)
 {
+    //check if total node exist
     
     zk.a_get("/Total",false,function(rc,err,value,data){
         console.log("rc",rc,'err',err,'value',value,'data',data);
-        //data=JSON.parse(data);
+        total=parseInt(data);
+        total=ParsInt(total)+ParsInt(sum);
         //total=data+sum;
         //console.log("total",total);
-        //saveTotal(data)
-        return data;
+        
+
+        zk.a_set("/Total",JSON.stringify(total),0,function(rc,err,stat){
+            //data=JSON.parse(data);
+            console.log('rc',rc,'err',err,'stat',stat,'sumation',sum);
+            //getTasks();
+        })
+
+
+
+
     }) ;
 
-    zk.a_set("/Total",JSON.stringify({sumation:sum}),0,function(rc,err,stat){
-        //data=JSON.parse(data);
-        console.log('rc',rc,'err',err,'stat',stat,'sumation',sum);
-    })
+
     //getTasks(err);
     //return data;
 }
