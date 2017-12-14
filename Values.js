@@ -6,11 +6,12 @@ var zk = new ZooKeeper({
  ,host_order_deterministic: false,
  data_as_buffer:false
 });
+//This file create the child nodes and put number in it
 zk.connect(function(){
-    //create
+   
     console.log ("connected");
     
-    //for loop to create a certin number of node not complete 
+    //for loop to create a certin number of node 
     for(var i =1;i<=1000;i++)
     {
         
@@ -25,6 +26,7 @@ zk.connect(function(){
                 });
             }
         });
+
     }
 
     
