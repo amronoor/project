@@ -9,7 +9,7 @@ var zk = new ZooKeeper({
 
 zookeeper.connect(function(){
     //create
-    zk.a_create("/totalNode", JSON.stringify({total:0}), null,
+    zk.a_create("/totalNode",0, null,
     function (rc, error, path)  {
         if (rc != 0) {
             console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);

@@ -9,20 +9,19 @@ var zookeeper = new ZooKeeper({
    //create
     //for loop to create a certin number of node not complete
     var created=0; 
-    for(var i =1;i<=5;i++)
-    {
-   zookeeper.a_create("/TotalNode", 0 ,null,
+   
+   zookeeper.a_create("/testnode", 0 ,null,
    function (rc, error, path)  {
        if (rc != 0) {
            console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
        } else {
            console.log ("created zk node %s", path);
            process.nextTick(function () {
-            zookeeper.close ();
+            //zookeeper.close ();
            });
        }
    });
-    }
+    
    
    // zookeeper.close ();
 

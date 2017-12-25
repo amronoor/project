@@ -9,16 +9,16 @@ var zookeeper = new ZooKeeper({
 var p;
 zookeeper.connect(function(){
 //get the children of the node 
-zookeeper.a_get_children("/",true,function(rc,error,value){
+zookeeper.a_get_children("/Tasks",true,function(rc,error,value){
 console.log("items",value);
 });
 
  
 //monitor if the child exist or deleted
-zookeeper.aw_get_children("/",
+zookeeper.aw_get_children("/Tasks",
 function(type,state,path){
     console.log("type",type,state,path);
-    zookeeper.a_get_children("/",true,function(rc,error,value){
+    zookeeper.a_get_children("/Tasks",true,function(rc,error,value){
         console.log("items",value);
         });
 },

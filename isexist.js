@@ -10,16 +10,29 @@ var zk = new ZooKeeper({
 zk.connect (function(){
 
 
-  zk.a_exists("/Tasks",false,function(rc,err,value)
+  zk.a_exists("/TotalNode",false,function(rc,err,value)
   {
-    console.log("rc",rc,"err",err,"value",value);
-  });
+    if(!value){
+      //create the node
+      console.log("Not exist");
 
-  zk.aw_exists("/Tasks",function(type,stat,path){
+    }else {
+      console.log("existe")
+    } 
+
+
+
+
+
+
+   // console.log("rc",rc,"err",err,"value",value);
+  });
+/*
+  zk.aw_exists("/Tasks2",function(type,stat,path){
     console.log("type",type,"stat",stat,"path",path);
   },function(rc,err,value){
       console.log("rc",rc,"err",err,"value",value);
   })
-  
+  */
 });
 

@@ -12,10 +12,10 @@ zk.connect(function(){
     console.log ("connected");
     
     //for loop to create a certin number of node 
-    for(var i =1;i<=1000;i++)
+    for(var i =1;i<=5;i++)
     {
         
-        zk.a_create("/Tasks/child",i,ZooKeeper.ZOO_SEQUENCE | ZooKeeper.ZOO_EPHEMERAL,
+        zk.a_create("/Tasks/",i,ZooKeeper.ZOO_SEQUENCE | ZooKeeper.ZOO_EPHEMERAL,
         function (rc, error, path)  {
             if (rc != 0) {
                 console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
@@ -46,7 +46,7 @@ zk.connect(function(){
 
 
 
-   //delete if the numbers is proccessed delete it انا بعطيه اسم النود الي فيها الرقم الي جمعناه وهو بيخذفو 
+   
  
  
 
