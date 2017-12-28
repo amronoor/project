@@ -97,7 +97,8 @@ function updateTotal(value)
       zk.a_get("/TotalNode",false,function(rc,err,value,data){
         console.log("Get total: ",'data',data);
         total=parseInt(data);
-        total=parseInt(total)+parseInt(value)+1000;
+        console.log("Get total: ",'data',total);
+       // total=parseInt(total)+parseInt(value)+1000;
         console.log("total=",parseInt(total));
 
         var version=value.version;
@@ -124,7 +125,8 @@ function updateTotal(value)
 //give it the old path and the new path to put the node in lock 
 
 //convert these function to a general functions 
-var from ="/workers1/"+client.client_id;
+//locking
+/*var from ="/workers1/"+client.client_id;
 var to ="/Machines"
 function moveNode(from,to)
 
@@ -148,7 +150,7 @@ function moveNode(from,to)
         }
     });
     
-}
+}*/
 
 /*
 function updateNodeValue(path,value){
