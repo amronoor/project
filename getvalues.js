@@ -13,22 +13,22 @@ zk.connect(function(){
     //for loop to create a certin number of node not complete 
    
         zk.a_get("/TotalNode",false,function(rc,err,value,data){
-           console.log("rc",rc,'err',err,'value',value,data);
-           total=parseInt(data);
+           console.log("rc",rc,'err',err,'value',value,'data',data);
+          // total=parseInt(data);
 
-           var version=value.version;
+          /* var version=value.version;
            zk.a_set("/TotalNode",0,version,function(rc,err,stat){
                console.log('rc:',rc,'err:',err,'stat:',stat,'Total=',total);
            });
-        
+        */
     }  );
     
 
-        zk.a_get("/TotalNode",false,function(rc,err,value,data){
+       /* zk.a_get("/TotalNode",false,function(rc,err,value,data){
             console.log("rc",rc,'err',err,'value',value,data);
             total=parseInt(data);
          
-     }  );
+     }  );*/
             /*var total_version=parseInt(value.version);
             console.log("version:",total_version);
        

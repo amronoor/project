@@ -10,7 +10,7 @@ var zk = new ZooKeeper({
 zk.connect(getTask);
 
 function getTask (err,client){
-    console.log("sss",err,client.client_id),client;
+    console.log("client_id",err,client.client_id),client;
    //check if the Taskes node exists
    zk.a_exists("/Tasks",true,function(rc,err,value){
             // console.log("rc",rc,"err",err,"value",value);
@@ -27,10 +27,10 @@ function getTask (err,client){
                           zk.close ();
                          });
                      }
-                 });''
+                 });
              
              } else { //if exists get the children then get the first child path 
-              console.log("`tasks node exist");
+              console.log("tasks node exist");
                         zk.aw_get_children("/Tasks",function(type, state, path )
                         {
                             console.log("type",type,"state",state,"path" ,path);
@@ -46,7 +46,7 @@ function getTask (err,client){
                            var OperatTask=children[i];//to Lock it when it has been processed 
                            console.log("first child:",FirstChild);
                            getValue(FirstChild);
-                           LockNode(OperatTask);
+                           //LockNode(OperatTask);
                         }
                            
                          }
@@ -70,16 +70,18 @@ function getValue(FirstChild)
     });
 }
 
-function LockNode(OperatTask,value)
+/*function LockNode(OperatTask,value)
 {
+
     zk.a_delete_(OperatTask,-1,function(rc,error,value){
         
         console.log("rc",rc,'err',error,'value',value);
         console.log("node is deleted ");
         
     });
-    
-    zk.a_create("/Machines/"+OperatTask,parseInt(value),null,
+    var v=JSON.stringfy({value:value ,machine:client_id});
+
+    zk.a_create("/onProgress/"+client_id,v,null,
     function (rc, error, path)  {
         if (rc != 0) {
             console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
@@ -90,7 +92,7 @@ function LockNode(OperatTask,value)
             });
         }
     });
-}
+}*/
 
 
 
@@ -98,7 +100,7 @@ function LockNode(OperatTask,value)
 function proccessTasks (value)
 {
      
-    updateTotal(value);
+    updateTotal(parseInt (value));
 
 }
 
@@ -106,40 +108,37 @@ function updateTotal(value)
 {
     console.log("updateTotal",value);
     //check if Total node exist
-    zk.a_exists("/TheTotalNode",false,function(rc,err,value)
+    zk.a_exists("/TheTotalNode",false,function(rc,err,result)
     {
-      if(!value){
+      if(!result){
         console.log("Not exist");
          
-    zk.a_create("/TheTotalNode",0 , null,
-    function (rc, error, path)  {
-        if (rc != 0) {
-       console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
-        } else {
-            console.log ("created zk node %s", path);
-            process.nextTick(function () {
-             zk.close ();
-            });
+                zk.a_create("/TheTotalNode",value , null,
+                function (rc, error, path)  {
+                    if (rc != 0) {
+                console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
+                    } else {
+                        console.log ("created zk node %s", path);
+                        process.nextTick(function () {
+                        zk.close ();
+                        });
         }
     });
       } else // if exists get the Total valu from the Total node and add the sum to it  
 
       {
 
-      zk.a_get("/TheTotalNode",false,function(rc,err,value,data){
+      zk.a_get("/TheTotalNode",false,function(rc,err,v2,data){
         console.log("Get total: ",'data',data);
         total=parseInt(data);
-        console.log("Get total: ",'data',total);
-
-        /* i guess there a problem in this statement cause if i operate it it give the total value Nan*/ 
-        //total=parseInt (total)+ parseInt(value)+1000; 
-         
+        total=parseInt(total)+ parseInt(value)+1000; 
         console.log("total=",parseInt(total));
-
-        var version=value.version;
+        
          // Store the total value at the Total node 
-        zk.a_set("/TotalNode",total,version,function(rc,err,stat){
-            console.log('rc:',rc,'err:',err,'stat:',stat,'Total=',total);
+         var version=parseInt(v2.version);
+         console.log("version",version);
+        zk.a_set("/TheTotalNode",total,parseInt(version),function(rc,err,stat){
+            //console.log('rc:',rc,'err:',err,'stat:',stat,'Total=',total);
             
         })
 
@@ -147,32 +146,7 @@ function updateTotal(value)
         //getTasks(err);
     });
            }
-
-        //unlock the node   
-function UnlockNode(OperatTask,value)
-{
-    zk.a_delete_("/Machines/"+OperatTask,-1,function(rc,error,value){
-        
-        console.log("rc",rc,'err',error,'value',value);
-        console.log("node is deleted ");
-        
-    });
-    
-    zk.a_create(OperatTask,parseInt(value),null,
-    function (rc, error, path)  {
-        if (rc != 0) {
-            console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
-        } else {
-            console.log ("created zk node %s", path);
-            process.nextTick(function () {
-             //zookeeper.close ();
-            });
-        }
-    });
-}
-
-
-
+           
 });
 }
 }

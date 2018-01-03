@@ -11,7 +11,7 @@ var zookeeper = new ZooKeeper({
     
     
     
-   zookeeper.a_create("/TheTotalNode", 0 ,null,
+   zookeeper.a_create("/onProgress", 0 ,null,
    function (rc, error, path)  {
        if (rc != 0) {
            console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
